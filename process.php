@@ -14,6 +14,7 @@ $data = [];
 $action = @$_REQUEST['action'];
 parse_str(file_get_contents('php://input'), $params);
 $arrName = explode(' ', $params['buyerName']);
+// id equivalent customerid
 $data['id'] = trim($params['buyerEmail']) . '-' . time();
 $data['firstName'] = $arrName[0];
 for ($i = 1; $i < count($arrName); $i++) {
@@ -44,16 +45,29 @@ switch ($action) {
 if (isset($result) && !empty($result->url)) {
     // insert $data for database
     $db = new Database();
-    try{
+    try {
         $convertedData = $db->convertKeysArrayToLower($data);
-        $res = $db->insert('users', $convertedData);
-        if ($res === true){
+
+        // create table name if table not exists
+        // continue if table name exists
+        $checkExitsTableName = $db->checkExistsTable(DB_TABLENAME);
+        if ($checkExitsTableName === false) {
+            switch (DB_DBMS) {
+                case 'postgres':
+                    $db->createTablesPostgres(DB_TABLENAME);
+                    break;
+                default:
+                    $db->createTablesMySQL(DB_TABLENAME);
+                    break;
+            }
+        }
+        $res = $db->insert(DB_TABLENAME, $convertedData);
+        if ($res === true) {
             $alepay->return_json('OK', 'Thành công', $result->url);
         }
-    }catch (PDOException $e){
+    } catch (PDOException $e) {
         $e->getMessage();
     }
-
 
 
 } else {

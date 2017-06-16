@@ -1,4 +1,5 @@
 <?php
+session_start();
 require('Lib/Alepay.php');
 require 'config.php';
 require 'Lib/ConnectDB/Database.php';
@@ -16,8 +17,9 @@ if (isset($_REQUEST['data']) && isset($_REQUEST['checksum'])) {
         // insert string JSON vào field informations
         $insertData['informations'] = $result;
         $whereData['customerid'] = $obj_data->data->customerId;
-        $res = $db->update('users', $insertData, $whereData);
-    }catch (PDOException $e){
+        $res = $db->update(DB_TABLENAME, $insertData, $whereData);
+        $_SESSION['customerid'] = $whereData;
+    } catch (PDOException $e) {
         $e->getMessage();
         die();
     }
@@ -65,18 +67,32 @@ if (isset($_REQUEST['data']) && isset($_REQUEST['checksum'])) {
                     </div>
                 </li>
                 <li class="collection-item">
-                    <?php if (isset($obj_data->data)){
-                        foreach ($obj_data->data as $k => $v) {?>
+                    <?php if (isset($obj_data->data)) {
+                        foreach ($obj_data->data as $k => $v) { ?>
+                            <?php if ($k === 'token') { ?>
+                                <div>
+                                    <h6 id="titleData"><?php echo $k . ' (Giá trị này nên lưu vào database)' ?></h6>
+                                    <p><?php echo $v ?></p>
+                                </div>
+                                <?php continue; } ?>
                             <div>
                                 <h6 id="titleData"><?php echo $k ?></h6>
                                 <p><?php echo $v ?></p>
                             </div>
-                    <?php }} ?>
+                        <?php }
+                    } ?>
                 </li>
                 <li>
-                    <?php if($res === true) { ?>
+                    <?php if ($res === true) { ?>
                         <div>
-                            <a href="<?php echo URL_DEMO ?>">BACK TO HOME PAGE</a>
+                            <a href="<?php echo URL_DEMO . '/' . $whereData['customerid']  ?>">BACK TO HOME PAGE</a>
+                        </div>
+                    <?php } ?>
+                </li>
+                <li>
+                    <?php if ($res === true) { ?>
+                        <div>
+                            <a href="<?php echo URL_TOKEN ?>">CHECKOUT WITH TOKENIZATION</a>
                         </div>
                     <?php } ?>
                 </li>

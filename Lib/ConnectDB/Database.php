@@ -14,15 +14,100 @@ class Database extends PDO
 
     public function __construct()
     {
-        $dsn = 'pgsql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->dbname;
+        if ($this->dbdbms === 'postgres'){
+            $dsn = 'pgsql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->dbname;
+        }
+        $dsn = 'mysql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->dbname;
         $options = array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
-
         try {
             $this->_db = new PDO($dsn, $this->user, $this->pass, $options);
         } catch (PDOException $e) {
             echo $e->getMessage();
             $this->error = $e->getMessage();
         }
+    }
+
+    public function createTablesPostgres($tableName)
+    {
+        $sql = "CREATE TABLE $tableName(
+            id integer NOT NULL DEFAULT nextval('users_id_seq'::regclass),
+            customerid CHARACTER VARYING,
+            firstname CHARACTER VARYING,
+            lastname CHARACTER VARYING,
+            email CHARACTER VARYING,
+            token CHARACTER VARYING,
+            street CHARACTER VARYING,
+            city CHARACTER VARYING,
+            state CHARACTER VARYING,
+            postalcode CHARACTER VARYING,
+            country CHARACTER VARYING,
+            phonenumber CHARACTER VARYING,
+            callback CHARACTER VARYING,
+            informations JSONB,
+            created_at TIMESTAMP DEFAULT(NOW()),
+            updated_at TIMESTAMP DEFAULT(NOW())
+        )";
+        $this->query($sql);
+        try {
+            $this->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            die();
+        }
+
+    }
+
+    public function checkExistsTable($tableName){
+        $sql = "SELECT 1 FROM $tableName LIMIT 1";
+        $this->query($sql);
+        try {
+            $res = $this->execute();
+        }catch (PDOException $e){
+            echo $e->getMessage();
+            die();
+        }
+        if ($res === TRUE){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function createTablesMySQL($tableName)
+    {
+        $sql = "CREATE TABLE $tableName(
+            id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            customerid VARCHAR(255),
+            firstname VARCHAR(255),
+            lastname VARCHAR(255),
+            email VARCHAR(255),
+            token VARCHAR(255),
+            street VARCHAR(255),
+            city VARCHAR(255),
+            state VARCHAR(255),
+            postalcode VARCHAR(255),
+            country VARCHAR(255),
+            phonenumber VARCHAR(255),
+            callback VARCHAR(255),
+            informations TEXT(1000),
+            updated_at DATETIME,
+            created_at DATETIME)";
+        $this->query($sql);
+        try {
+            $this->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            die();
+        }
+
+    }
+
+    /**
+     * @param $tableName
+     */
+    public function issetTable($tableName)
+    {
+
     }
 
     public function query($sql)

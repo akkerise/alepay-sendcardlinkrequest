@@ -1,16 +1,24 @@
 <?php
 // ThanhNA (0968381829) - nguyenthanh.rise.88@gmail.com
-
+//define('DB_DBMS', 'postgres');
+//define('DB_HOST', 'localhost');
+//define('DB_PORT', 5432);
+//define('DB_USER', 'postgres');
+//define('DB_PASS', '8888');
+//define('DB_DBNAME', 'tododb');
+//define('DB_TABLENAME', 'testusers123');
+define('DB_DBMS', 'mysql');
 define('DB_HOST', 'localhost');
-define('DB_PORT', 5432);
-define('DB_USER', 'postgres');
+define('DB_PORT', 80);
+define('DB_USER', 'root');
 define('DB_PASS', '8888');
-define('DB_DBNAME', 'tododb');
+define('DB_DBNAME', 'databasetest');
+define('DB_TABLENAME', 'abcxyz');
 
 //Thông tin cấu hình
 define('URL_DEMO', (isset($_SERVER['HTTPS']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . '/alepay-sendcardlinkrequest/');
 define('URL_CALLBACK', URL_DEMO . '/result.php'); // URL đón nhận kết quả
-
+define('URL_TOKEN', (isset($_SERVER['HTTPS']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . '/alepay-tokenization/');
 //Alepay cung cấp
 $config = array(
     "apiKey" => "0COVspcyOZRNrsMsbHTdt8zesP9m0y", //Là key dùng để xác định tài khoản nào đang được sử dụng.
