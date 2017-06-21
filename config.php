@@ -1,19 +1,19 @@
 <?php
 // ThanhNA (0968381829) - nguyenthanh.rise.88@gmail.com
-//define('DB_DBMS', 'postgres');
-//define('DB_HOST', 'localhost');
-//define('DB_PORT', 5432);
-//define('DB_USER', 'postgres');
-//define('DB_PASS', '8888');
-//define('DB_DBNAME', 'tododb');
-//define('DB_TABLENAME', 'testusers123');
-define('DB_DBMS', 'mysql');
-define('DB_HOST', 'localhost');
-define('DB_PORT', 80);
-define('DB_USER', 'root');
-define('DB_PASS', '8888');
-define('DB_DBNAME', 'databasetest');
-define('DB_TABLENAME', 'abcxyz');
+// define('DB_DBMS', 'postgres');          // Hệ quản trị cơ sở dữ liệu bạn dùng (Postgresql or MySQL)
+// define('DB_HOST', 'localhost');         // Host
+// define('DB_PORT', 5432);                // Cổng kết nối tới CSDL
+// define('DB_USER', 'postgres');          // Tên đăng nhập
+// define('DB_PASS', '8888');              // Pass đăng nhập
+// define('DB_DBNAME', 'tododb');          // Tên của Database bạn quản lý
+// define('DB_TABLENAME', 'testusers123'); // Tên của bảng dữ liệu , lưu ý thêm đầy đủ các trường dữ liệu
+define('DB_DBMS', 'mysql');             // Hệ quản trị cơ sở dữ liệu bạn dùng (Postgresql or MySQL)
+define('DB_HOST', 'localhost');         // Host
+define('DB_PORT', 80);                  // Cổng kết nối tới CSDL
+define('DB_USER', 'root');              // Tên đăng nhập
+define('DB_PASS', '8888');              // Pass đăng nhập
+define('DB_DBNAME', 'databasetest');    // Tên của Database bạn quản lý
+define('DB_TABLENAME', 'abcxyz');       // Tên của bảng dữ liệu , lưu ý thêm đầy đủ các trường dữ liệu
 
 //Thông tin cấu hình
 define('URL_DEMO', (isset($_SERVER['HTTPS']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . '/alepay-sendcardlinkrequest/');

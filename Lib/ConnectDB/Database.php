@@ -1,5 +1,4 @@
 <?php
-
 class Database extends PDO
 {
     private $host = DB_HOST;
@@ -7,6 +6,7 @@ class Database extends PDO
     private $user = DB_USER;
     private $pass = DB_PASS;
     private $dbname = DB_DBNAME;
+    private $dbdbms = DB_DBMS;
 
     private $_db;
     private $stmt;
@@ -14,7 +14,7 @@ class Database extends PDO
 
     public function __construct()
     {
-        if ($this->dbdbms === 'postgres'){
+        if ($this->dbdbms === 'postgres') {
             $dsn = 'pgsql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->dbname;
         }
         $dsn = 'mysql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->dbname;
@@ -27,6 +27,24 @@ class Database extends PDO
         }
     }
 
+    // create Database Name
+    public function createDatabaseName($nameDatabase){
+        $sql = "CREATE DATABASE $nameDatabase CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";
+        $this->query($sql);
+        try {
+            $res = $this->execute();
+        }catch(PDOException $e){
+            echo $e->getMessage();
+            die();
+        }
+        if ($res === TRUE) {
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    // Create Table Postgres
     public function createTablesPostgres($tableName)
     {
         $sql = "CREATE TABLE $tableName(
@@ -57,6 +75,8 @@ class Database extends PDO
 
     }
 
+
+    // Check Table Name Exists
     public function checkExistsTable($tableName){
         $sql = "SELECT 1 FROM $tableName LIMIT 1";
         $this->query($sql);
@@ -73,6 +93,7 @@ class Database extends PDO
         }
     }
 
+    // Create Table MySQL
     public function createTablesMySQL($tableName)
     {
         $sql = "CREATE TABLE $tableName(
@@ -99,14 +120,6 @@ class Database extends PDO
             echo $e->getMessage();
             die();
         }
-
-    }
-
-    /**
-     * @param $tableName
-     */
-    public function issetTable($tableName)
-    {
 
     }
 
@@ -156,20 +169,6 @@ class Database extends PDO
         $this->execute();
         return $this->stmt->fetch(PDO::FETCH_ASSOC);
     }
-
-//    public function checkExists($tableName, $data, $param)
-//    {
-//        $newData = $this->convertKeysArrayToLower($data);
-//        $newParam = $this->createConditionOR($param);
-//        $sql = "SELECT * FROM $tableName WHERE $newParam";
-//        $this->query($sql);
-//        $data = $this->findAll();
-//        if ($data['token'] === NULL || $data['token'] === '') {
-//            return false;
-//        } else {
-//            return true;
-//        }
-//    }
 
     public function rowCount()
     {

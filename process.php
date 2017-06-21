@@ -1,20 +1,38 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: akke
- * Date: 6/11/17
- * Time: 10:54 PM
- */
+error_reporting(8191);
 require 'config.php';
 require 'Lib/Alepay.php';
 require 'Lib/ConnectDB/Database.php';
 
+
+// Create database name
+$actionCreateDB = @$_REQUEST['action'];
 $alepay = new Alepay($config);
+if ($actionCreateDB === 'createDatabase') {
+
+    // create instance Database()
+    $createDB = new Database();
+    $resultCreateDB = $createDB->createDatabaseName($_POST['dbName']);
+    $checkExitsTableName = $createDB->checkExistsTable(DB_TABLENAME);
+    if ($checkExitsTableName === false){
+        switch (DB_DBMS) {
+            case 'postgres':
+                $createDB->createTablesPostgres($_POST['tbName']);
+                break;
+            default:
+                $createDB->createTablesMySQL($_POST['tbName']);
+                break;
+        }
+    }
+    header('location: '. '/alepay-sendcardlinkrequest' );
+//    $alepay->return_json('OK', 'Tạo Database Thành Công');
+}
+
+
 $data = [];
 $action = @$_REQUEST['action'];
 parse_str(file_get_contents('php://input'), $params);
 $arrName = explode(' ', $params['buyerName']);
-// id equivalent customerid
 $data['id'] = trim($params['buyerEmail']) . '-' . time();
 $data['firstName'] = $arrName[0];
 for ($i = 1; $i < count($arrName); $i++) {
@@ -47,20 +65,6 @@ if (isset($result) && !empty($result->url)) {
     $db = new Database();
     try {
         $convertedData = $db->convertKeysArrayToLower($data);
-
-        // create table name if table not exists
-        // continue if table name exists
-        $checkExitsTableName = $db->checkExistsTable(DB_TABLENAME);
-        if ($checkExitsTableName === false) {
-            switch (DB_DBMS) {
-                case 'postgres':
-                    $db->createTablesPostgres(DB_TABLENAME);
-                    break;
-                default:
-                    $db->createTablesMySQL(DB_TABLENAME);
-                    break;
-            }
-        }
         $res = $db->insert(DB_TABLENAME, $convertedData);
         if ($res === true) {
             $alepay->return_json('OK', 'Thành công', $result->url);
@@ -68,7 +72,6 @@ if (isset($result) && !empty($result->url)) {
     } catch (PDOException $e) {
         $e->getMessage();
     }
-
 
 } else {
     $alepay->return_json($result->errorCode, $result->errorDescription);

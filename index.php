@@ -1,40 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: akke
- * Date: 6/11/17
- * Time: 10:54 PM
- */
+session_start();
 require('config.php');
 require('Lib/ConnectDB/Database.php');
-
-$db = new Database();
-
-//$res = $db->insert('todo', [
-//    'title' => md5(rand(1, 1000)),
-//    'status' => 1,
-//    'created_at' => 'NOW()'
-//]);
-
-//$sql = "UPDATE todo SET title=:title, status=:status WHERE id=:_id";
-//$sql = "DELETE FROM todo WHERE id = 3";
-//$res = $db->delete('todo',
-//    [
-//        'id' => '',
-//        'status' => 1,
-//        'title' => 'clgt',
-//        'created_at' => NULL,
-//    ]
-//);
-
-
-//if ($res === true) {
-//    echo "Delete success";
-//} else {
-//    echo $res;
-//}
 ?>
-<?php session_start(); ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -61,73 +29,71 @@ require_once 'config.php';
 <div id="container" class="container">
     <div class="col-sm-5">
         <div class="col-sm-12">
-            <h2 id="titleItem">Điện thoại iphone 6 16GB</h2><br>
-            <img src="http://multimedia.bbycastatic.ca/multimedia/products/500x500/105/10528/10528315.jpg" width="250"
-                 alt="Iporn 6"><br>
-            <p><b>16.000.000₫ (Còn hàng) / 1 Chiếc</b></p><br>
-            <table class="table">
-                <tbody>
-                <tr>
-                    <td>Màn hình</td>
-                    <td>LED-backlit IPS LCD, 7.9 inch</td>
-                </tr>
-                <tr>
-                    <td>Hệ điều hành</td>
-                    <td>iOS 8</td>
-                </tr>
-                <tr>
-                    <td>Vi xử lí CPU</td>
-                    <td>Dual - Core, 1 GHz</td>
-                </tr>
-                <tr>
-                    <td>RAM</td>
-                    <td>512 MB</td>
-                </tr>
-                <tr>
-                    <td>Bộ nhớ trong</td>
-                    <td>64 GB, 32 GB, 16 GB</td>
-                </tr>
-                <tr>
-                    <td>Camera</td>
-                    <td>5 MP(2592 x 1944 pixels)</td>
-                </tr>
-                <tr>
-                    <td>Kết nối</td>
-                    <td>Không 3G, Wifi chuẩn 802.11 a/b/g/n</td>
-                </tr>
-                <tr>
-                    <td>Đàm thoại</td>
-                    <td>Face Time</td>
-                </tr>
-                <tr>
-                    <td>Dung lượng pin</td>
-                    <td>4490mAh(16.3Wh)</td>
-                </tr>
-                </tbody>
-            </table>
+            <h4><span class="require">Bước 1: </span>Tạo Database Để Lưu Dữ Liệu</h4>
+            <form class="form" role="form" method="POST" id="formSubmitCreateDB"
+                  action="<?= URL_DEMO ?>process.php?action=createDatabase">
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="form-group col-sm-5">
+                        <label class="control-label">Database Name : <span class="require">(*)</span></label>
+                        <input type="text" placeholder="Database Name" class="form-control" name="dbName" id="dbName"
+                               value="databasetest" required>
+                    </div>
+                </div>
+                <div class="row"></div>
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="form-group col-sm-5">
+                        <label class="control-label">Table Name : <span class="require">(*)</span></label>
+                        <input type="text" placeholder="Table Name" class="form-control" name="tbName" id="tbName"
+                               value="abcxyz" required>
+                    </div>
+                </div>
+                <div class="row"></div>
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-5">
+                        <div class="form-group col-sm-3">
+                            <button id="submitDb" type="submit" class="btn btn-info btn-lg">
+                                Tạo Database
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            <br>
+            <div class="row">
+
+            </div>
+            <div class="row">
+                <p>
+                    <span class="require">
+                Lưu ý :
+            </span> Sau khi khởi tạo thành công bạn hãy nhập lại thông tin tại file config.php
+                </p>
+                <ul>
+                    <li>DB_DBMS (hệ quản trị dữ liệu bạn dùng ) : mysql</li>
+                    <li>DB_HOST : localhost</li>
+                    <li>DB_PORT : 80</li>
+                    <li>DB_USER : root</li>
+                    <li>DB_PASS (mặc định là rỗng) : ""</li>
+                    <li>DB_DBNAME (tên database bạn vừa khởi tạo): databasetest</li>
+                    <li>DB_TABLENAME (tên bảng table bạn vừa khởi tạo): abcxyz</li>
+                </ul>
+            </div>
         </div>
     </div>
+
     <div class="col-sm-7">
-        <h2>Thông tin khách hàng</h2>
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <h4><span class="require">Bước 2: </span>Tạo Liên Kết Thẻ Đến Alepay</h4>
+            </div>
+        </div>
         <form class="form-" role="form" method="POST" id="formSubmit"
               action="<?= URL_DEMO ?>process.php?action=sendCardLinkRequest">
-            <!--            <div class="form-group col-sm-5">-->
-            <!--                <label class="control-label">Tổng Tiền <span class="require">(*)</span></label>-->
-            <!--                <input type="text" class="form-control" name="amount" id="amount" required>-->
-            <!--            </div>-->
-            <!--            <div class="form-group col-sm-5">-->
-            <!--                <label class="control-label">Số Lượng <span class="require">(*)</span></label>-->
-            <!--                <input type="text" placeholder="Số Lượng" class="form-control" name="totalItem" id="totalItem" required value="1">-->
-            <!--            </div>-->
-            <!--            <div class="form-group col-sm-5">-->
-            <!--                <label class="control-label">Tiền Tệ <span-->
-            <!--                            class="require">(*)</span></label>-->
-            <!---->
-            <!--                <select name="currency" id="currency" class="form-control">-->
-            <!--                    <option value="VND" selected>VND</option>-->
-            <!--                    <option value="USD">USD</option>-->
-            <!--                </select>-->
-            <!--            </div>-->
             <div class="form-group col-sm-5">
                 <label class="control-label">Email <span class="require">(*)</span></label>
                 <input type="text" placeholder="Email" class="form-control" name="buyerEmail" id="buyerEmail"
@@ -144,12 +110,6 @@ require_once 'config.php';
                 <input type="text" placeholder="Số Điện Thoại" class="form-control" name="phoneNumber" id="phoneNumber"
                        value="0988888888" required>
             </div>
-            <!-- Text input-->
-<!--            <div class="form-group col-sm-5">-->
-<!--                <label class="control-label">Địa Chỉ <span class="require">(*)</span></label>-->
-<!--                <input type="text" placeholder="Địa Chỉ" class="form-control" name="buyerAddress" id="buyerAddress"-->
-<!--                       value="Xóm Mới - Duyên Hà - Đông Mỹ - Thanh Trì - Hà Nội" required>-->
-<!--            </div>-->
             <div class="form-group col-sm-5">
                 <label class="control-label">Quốc Gia <span class="require">(*)</span></label>
                 <input type="text" placeholder="" class="form-control" name="buyerCountry" id="buyerCountry"
@@ -160,10 +120,6 @@ require_once 'config.php';
                 <input type="text" placeholder="" class="form-control" name="state" id="state"
                        value="Quận Hai Bà Trưng" required>
             </div>
-            <!--            <div class="form-group col-sm-5">-->
-            <!--                <label class="control-label" for="orderDescription">Mô Tả HóaĐơn<span class="require">(*)</span></label>-->
-            <!--                <textarea placeholder="Thông Tin Mô Tả Hóa Đơn" id="orderDescription" name="orderDescription" class="form-control" required=""></textarea>-->
-            <!--            </div>-->
             <div class="form-group col-sm-5">
                 <label class="control-label" for="street">Đường <span class="require">(*)</span></label>
                 <input type="text" placeholder="Đường" class="form-control" value="Hai Bà Trưng" name="street"
@@ -182,10 +138,11 @@ require_once 'config.php';
             </div>
             <div class="row"></div>
             <div class="col-sm-12" id="alert"></div>
-            <div class="form-group col-sm-5">
+            <div class="form-group col-sm-8">
                 <p>&nbsp;</p>
+                <div class="col-sm-5"></div>
                 <button id="sendInstallment" type="button" class="btn btn-info btn-lg">
-                    Thanh Toán Trả Góp
+                    Liên kết thẻ Alepay
                 </button>
             </div>
         </form>

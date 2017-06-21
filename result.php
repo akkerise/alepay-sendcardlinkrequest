@@ -17,6 +17,8 @@ if (isset($_REQUEST['data']) && isset($_REQUEST['checksum'])) {
         // insert string JSON vào field informations
         $insertData['informations'] = $result;
         $whereData['customerid'] = $obj_data->data->customerId;
+
+        // update token cho khách hàng vào CSDL
         $res = $db->update(DB_TABLENAME, $insertData, $whereData);
         $_SESSION['customerid'] = $whereData;
     } catch (PDOException $e) {
@@ -85,14 +87,14 @@ if (isset($_REQUEST['data']) && isset($_REQUEST['checksum'])) {
                 <li>
                     <?php if ($res === true) { ?>
                         <div>
-                            <a href="<?php echo URL_DEMO . '/' . $whereData['customerid']  ?>">BACK TO HOME PAGE</a>
+                            <a href="<?php echo URL_DEMO . '/' . $whereData['customerid']  ?>">TRỞ LẠI TRANG LIÊN KẾT THẺ</a>
                         </div>
                     <?php } ?>
                 </li>
                 <li>
                     <?php if ($res === true) { ?>
                         <div>
-                            <a href="<?php echo URL_TOKEN ?>">CHECKOUT WITH TOKENIZATION</a>
+                            <a href="<?php echo URL_TOKEN ?>">THANH TOÁN BẰNG TOKENIZATION</a>
                         </div>
                     <?php } ?>
                 </li>
